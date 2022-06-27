@@ -7,6 +7,7 @@ It includes a LEMP environment comprised of a network of docker containers for l
 ## Required Technologies
 - **[Docker Desktop](https://docs.docker.com/desktop/)**
 - **[Git](https://git-scm.com/downloads)**
+- **[Composer](https://getcomposer.org/download/)**
 
 ## Setup
 To get started, make sure you have [Docker installed](https://docs.docker.com/desktop/) on your system, then clone 
@@ -14,10 +15,13 @@ To get started, make sure you have [Docker installed](https://docs.docker.com/de
 to a local directory on your system.
 If you don't have Git installed, get it from [here](https://git-scm.com/downloads).
 
-Next, navigate in your terminal to the directory you cloned this to and spin up the containers
+Second, navigate in a command terminal to the directory you cloned this to and execute `composer install` to install any vendor
+library dependencies. If you don't have Composer, download it from [here](https://getcomposer.org/download/).
+
+Third, stay in the current directory you cloned this to and spin up the containers
 for the web server by running `docker-compose up -d --build`. The build will take a few minutes to complete.
 
-The following services are built for our web server, with their respective ports detailed.
+The following services are built for the web server, with their respective ports detailed.
 
 - **nginx** - `:80`
 - **mysql** - `:3306`
@@ -26,11 +30,12 @@ The following services are built for our web server, with their respective ports
 ## Very Important
 Copy `env.dist` to `.env`
 
-By default, the baseURL is `http://localhost/` and the default database is already set.
+By default, the baseURL is `http://localhost/` and the default database is already set. MySQL won't be setup properly
+if this file isn't copied to `.env`.
 
 ## Test Setup
 Once the environment is up and running, open browser to [localhost](http://localhost). If the CodeIgniter
-Welcome page is shown, the server is successfully running. To test the API navigate to
+Welcome page is shown, the server is successfully running. To test the API, navigate to
 [http://localhost/api/weather/office/forecast](http://localhost/api/weather/office/forecast) in the browser.
 The page should return a 401 status message in JSON format.
 
@@ -52,4 +57,5 @@ in JSON format.
 ## Utility Tools / Troubleshooting
 - **To Reset MySQL data** : `bash reset-db.sh`
 - To prevent `docker-compose down` from failing, you must remove the `.` from `.env` or delete the file.
-- **Remove weather-api image** : `docker rmi weather-api_php_fpm`
+- **Remove weather-api PHP image** : `docker rmi weather-api_php_fpm`
+- **Remove weather-api nginx image** : `docker rmi weather-api_nginx`
