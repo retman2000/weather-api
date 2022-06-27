@@ -49,6 +49,7 @@ in JSON format.
 - **username** : root
 - **password** : Password123!
 
-## Utility Tool
+## Utility Tools / Troubleshooting
 - **To Reset MySQL data** : `bash reset-db.sh`
+- To prevent `docker-compose down` from failing, you must remove the `.` from `.env` or delete the file.
 - **Remove weather-api image** : `docker rmi weather-api_php_fpm`

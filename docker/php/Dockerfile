@@ -58,8 +58,7 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install calendar && \
     docker-php-ext-install exif
 
-RUN cp env.dist .env
-#RUN mv -f env.dist .env
+RUN mv env.dist .env
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
