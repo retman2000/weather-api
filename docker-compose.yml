@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: gt_mysql
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql/
+      - ./docker/mysql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: myapi
+      MYSQL_ROOT_PASSWORD: Password123!
+    networks:
+      - tempest
+
+  php_fpm:
+    build:
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    working_dir: /var/www/
+    container_name: gt_php_fpm
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - mysql
+    networks:
+      - tempest
+
+  nginx:
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    container_name: gt_nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - php_fpm
+      - mysql
+    networks:
+      - tempest
+
+networks:
+  tempest:
+    driver: bridge
